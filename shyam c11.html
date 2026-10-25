@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>DeliverIQ – Delivery Performance Crisis Agent</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#0b1020;--card:#141a33;--card2:#1b2347;--tx:#e8ecff;--mut:#9aa3c7;--bd:#262f5c;--a1:#7c5cff;--a2:#00d4ff;--a3:#ff5c8a;--a4:#ffb02e;--a5:#2ee6a6;color-scheme:dark}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b1020}}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#f1f3ff;--card:#fff;--card2:#eef0ff;--tx:#151a3a;--mut:#5b6390;--bd:#d9ddf5;color-scheme:light}}
+:root[data-theme="dark"]{--bg:#0b1020}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(900px 500px at 0% 0%,rgba(124,92,255,.22),transparent),radial-gradient(800px 500px at 100% 10%,rgba(0,212,255,.15),transparent),var(--bg);color:var(--tx);font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;min-height:100vh}
+.wrap{max-width:1180px;margin:0 auto;padding:16px}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+h1{margin:0;font-size:1.45rem;letter-spacing:-.02em;background:linear-gradient(90deg,var(--a2),var(--a1),var(--a3));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{color:var(--mut);font-size:.82rem;margin-top:2px}
+.live{display:inline-flex;gap:6px;align-items:center;font-size:.75rem;color:var(--a5)}
+.live i{width:8px;height:8px;border-radius:50%;background:var(--a5);box-shadow:0 0 0 0 var(--a5);animation:p 1.6s infinite}
+@keyframes p{70%{box-shadow:0 0 0 8px transparent}}
+.filters{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0 4px}
+.chip,.tab{border:1px solid var(--bd);background:var(--card);color:var(--mut);padding:7px 12px;border-radius:999px;font-size:.8rem;cursor:pointer;font-family:inherit}
+.chip.on{background:linear-gradient(90deg,var(--a1),var(--a2));color:#fff;border-color:transparent}
+.tabs{display:flex;gap:6px;overflow-x:auto;margin:12px 0;padding-bottom:4px}
+.tab{white-space:nowrap;border-radius:12px;padding:9px 14px}
+.tab.on{color:#fff;background:linear-gradient(90deg,var(--a3),var(--a1));border-color:transparent}
+.grid{display:grid;gap:12px}
+.kpis{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.two{grid-template-columns:repeat(auto-fit,minmax(310px,1fr))}
+.card{background:linear-gradient(160deg,var(--card),var(--card2));border:1px solid var(--bd);border-radius:16px;padding:14px;position:relative;overflow:hidden}
+.card h3{margin:0 0 10px;font-size:.92rem}
+.kpi:before{content:"";position:absolute;inset:0 0 auto 0;height:3px;background:var(--c)}
+.kpi .l{font-size:.72rem;color:var(--mut);text-transform:uppercase;letter-spacing:.06em}
+.kpi .v{font-size:1.7rem;font-weight:800;margin:4px 0;color:var(--c)}
+.kpi .d{font-size:.74rem;color:var(--mut)}
+.banner{border-radius:16px;padding:14px 16px;background:linear-gradient(120deg,rgba(255,92,138,.22),rgba(124,92,255,.22));border:1px solid var(--bd);margin-bottom:12px;font-size:.88rem;line-height:1.5}
+.banner b{color:var(--a4)}
+svg{width:100%;height:auto;display:block}
+.bar{display:grid;grid-template-columns:92px 1fr 46px;gap:8px;align-items:center;margin:8px 0;font-size:.8rem;cursor:pointer}
+.track{height:12px;background:var(--bd);border-radius:8px;overflow:hidden}
+.fill{height:100%;border-radius:8px;transition:width .6s}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.78rem;min-width:520px}
+th,td{padding:7px 6px;text-align:center;border-bottom:1px solid var(--bd)}
+th{color:var(--mut);font-weight:600}td:first-child,th:first-child{text-align:left}
+.hm td{border:2px solid var(--card);border-radius:6px;color:#0b1020;font-weight:700;padding:9px 4px}
+.tag{display:inline-block;padding:2px 8px;border-radius:8px;font-size:.7rem;font-weight:700}
+.rec{display:flex;gap:10px;padding:10px;border-radius:12px;background:var(--bd);margin:8px 0;font-size:.82rem;line-height:1.4}
+.rec b{display:block}.rec .n{min-width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-weight:800;color:#fff}
+.sl{margin:12px 0}.sl label{display:flex;justify-content:space-between;font-size:.82rem;margin-bottom:4px}
+input[type=range]{width:100%;accent-color:var(--a1)}
+.chat{height:340px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding:4px}
+.m{max-width:88%;padding:10px 12px;border-radius:14px;font-size:.83rem;line-height:1.5}
+.m.u{align-self:flex-end;background:linear-gradient(90deg,var(--a1),var(--a2));color:#fff}
+.m.a{align-self:flex-start;background:var(--bd)}
+.m b{color:var(--a4)}
+.ask{display:flex;gap:8px;margin-top:10px}
+.ask input{flex:1;background:var(--bg);border:1px solid var(--bd);color:var(--tx);border-radius:12px;padding:11px;font-family:inherit;font-size:.85rem;min-width:0}
+.ask button{border:0;border-radius:12px;padding:0 16px;background:linear-gradient(90deg,var(--a3),var(--a1));color:#fff;font-weight:700;cursor:pointer}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.hide{display:none}
+</style></head><body><div class="wrap">
+<header><div><h1>⚡ DeliverIQ — Delivery Crisis AI Agent</h1><div class="sub">Root-cause intelligence across orders · warehouses · routes · staffing · inventory (assumed data, 8 weeks)</div></div><span class="live"><i></i>Agent online</span></header>
+<div class="filters" id="filters"></div>
+<div class="tabs" id="tabs"></div>
+
+<section id="t0">
+<div class="banner">🔎 <b>The paradox:</b> network capacity utilisation sits at a comfortable <b>~68%</b>, yet on-time delivery fell from <b>91% → 78%</b> in 8 weeks. Capacity is not the problem — <b>allocation, availability and execution</b> are. Click any warehouse to drill down.</div>
+<div class="grid kpis" id="kpis"></div>
+<div class="grid two" style="margin-top:12px">
+<div class="card"><h3>📉 On-time % vs capacity utilisation (weekly)</h3><div id="trend"></div></div>
+<div class="card"><h3>🏭 On-time delivery by warehouse</h3><div id="whbars"></div></div></div>
+</section>
+
+<section id="t1" class="hide">
+<div class="grid two">
+<div class="card"><h3>🧬 Root-cause attribution (share of delay)</h3><div id="causes"></div></div>
+<div class="card"><h3>🛠 AI recommendations (ranked by impact)</h3><div id="recs"></div></div></div>
+<div class="card tbl" style="margin-top:12px"><h3>🌡 On-time heatmap · warehouse × weekday</h3><table class="hm" id="heat"></table></div>
+<div class="card tbl" style="margin-top:12px"><h3>📋 Operational scorecard</h3><table id="score"></table></div>
+</section>
+
+<section id="t2" class="hide">
+<div class="grid two">
+<div class="card"><h3>🎛 What-if simulator <span class="sub" id="simscope"></span></h3>
+<div class="sl"><label><span>👷 Fill staffing gaps (cut absenteeism)</span><b id="s1v"></b></label><input type="range" id="s1" min="0" max="100" value="50"></div>
+<div class="sl"><label><span>📦 Rebalance inventory to demand nodes</span><b id="s2v"></b></label><input type="range" id="s2" min="0" max="100" value="50"></div>
+<div class="sl"><label><span>🛣 Optimise routes &amp; dispatch cut-offs</span><b id="s3v"></b></label><input type="range" id="s3" min="0" max="100" value="50"></div></div>
+<div class="card"><h3>🎯 Projected outcome</h3><div id="sim"></div></div></div>
+</section>
+
+<section id="t3" class="hide">
+<div class="card"><h3>🤖 Ask the agent <span class="sub">(analyses the data live; try naming a warehouse)</span></h3>
+<div class="chat" id="chat"></div>
+<div class="chips" id="qchips"></div>
+<div class="ask"><input id="q" placeholder="e.g. Why is Delhi late?" autocomplete="off"><button id="go">Ask</button></div></div>
+</section>
+<p class="sub" style="text-align:center;margin-top:18px">Synthetic data for demonstration · Rule-based analytics engine with driver attribution</p>
+</div>
+<script>
+const $=s=>document.querySelector(s);
+const W=[
+{n:"Delhi",o:14200,otd:71,pp:9.8,so:14,ab:17,bl:2300,ro:22,ut:74,dl:1.9,cp:41},
+{n:"Mumbai",o:12800,otd:78,pp:7.9,so:9,ab:11,bl:1500,ro:18,ut:70,dl:1.2,cp:28},
+{n:"Bengaluru",o:11000,otd:86,pp:5.2,so:6,ab:6,bl:600,ro:9,ut:66,dl:.6,cp:14},
+{n:"Chennai",o:8200,otd:83,pp:5.9,so:7,ab:8,bl:700,ro:11,ut:62,dl:.8,cp:17},
+{n:"Kolkata",o:7400,otd:69,pp:10.4,so:15,ab:19,bl:1700,ro:24,ut:64,dl:2.1,cp:44},
+{n:"Hyderabad",o:9100,otd:88,pp:4.8,so:5,ab:5,bl:400,ro:8,ut:61,dl:.5,cp:11}];
+const wk=["W1","W2","W3","W4","W5","W6","W7","W8"],TOT=[91,90,88,86,84,82,80,78],UT=[66,67,66,68,67,68,69,68];
+const K=["o","otd","pp","so","ab","bl","ro","ut","dl","cp"];
+let sel="All",tab=0;
+function scope(){if(sel!=="All")return W.find(w=>w.n===sel);const t=W.reduce((a,w)=>a+w.o,0),r={n:"All",o:t};K.slice(1).forEach(k=>r[k]=W.reduce((a,w)=>a+w[k]*w.o,0)/t);r.o=t;r.bl=W.reduce((a,w)=>a+w.bl,0);return r}
+function causes(s){const raw=[["Stock-outs & split shipments",s.so*1.9,"var(--a3)"],["Pick-pack staffing gaps",s.ab*1.5,"var(--a4)"],["Route & last-mile overrun",s.ro*1.1,"var(--a2)"],["Inventory in wrong warehouse",s.so*.9+s.bl/220,"var(--a1)"],["Batching / dispatch cut-off",(s.pp-4)*1.6,"var(--a5)"]];const t=raw.reduce((a,r)=>a+r[1],0);return raw.map(r=>({n:r[0],v:r[1]/t*100,c:r[2]})).sort((a,b)=>b.v-a.v)}
+const f1=x=>x.toFixed(1),col=v=>`hsl(${Math.max(0,Math.min(125,(v-62)*3.8))} 80% 55%)`;
+function gains(s,a,b,c){return{st:s.ab*.5*a,iv:s.so*.75*b,rt:s.ro*.4*c}}
+function draw(){
+ const s=scope(),f=$("#filters");
+ f.innerHTML=["All",...W.map(w=>w.n)].map(n=>`<button class="chip ${n===sel?"on":""}" data-w="${n}">${n==="All"?"🌍 Network":n}</button>`).join("");
+ f.querySelectorAll("button").forEach(b=>b.onclick=()=>{sel=b.dataset.w;draw()});
+ $("#tabs").innerHTML=["📊 Overview","🧬 Root causes","🎛 Simulator","🤖 AI Agent"].map((t,i)=>`<button class="tab ${i===tab?"on":""}" data-t="${i}">${t}</button>`).join("");
+ $("#tabs").querySelectorAll("button").forEach(b=>b.onclick=()=>{tab=+b.dataset.t;draw()});
+ [0,1,2,3].forEach(i=>$("#t"+i).classList.toggle("hide",i!==tab));
+ const k=[["On-time delivery",f1(s.otd)+"%","target 92% · gap "+f1(92-s.otd)+" pts","var(--a5)"],["Avg delay",f1(s.dl)+" d","per late order","var(--a3)"],["Complaints",f1(s.cp)+"","per 1,000 orders","var(--a4)"],["Pick-pack time",f1(s.pp)+" h","benchmark 5.0 h","var(--a2)"],["Capacity used",f1(s.ut)+"%","spare capacity exists ✔","var(--a1)"],["Backlog",Math.round(s.bl).toLocaleString(),"orders awaiting dispatch","var(--a3)"]];
+ $("#kpis").innerHTML=k.map(x=>`<div class="card kpi" style="--c:${x[3]}"><div class="l">${x[0]}</div><div class="v">${x[1]}</div><div class="d">${x[2]}</div></div>`).join("");
+ trend();
+ $("#whbars").innerHTML=W.slice().sort((a,b)=>a.otd-b.otd).map(w=>`<div class="bar" data-w="${w.n}"><span>${w.n}</span><div class="track"><div class="fill" style="width:${w.otd}%;background:${col(w.otd)}"></div></div><b>${w.otd}%</b></div>`).join("");
+ document.querySelectorAll("#whbars .bar").forEach(b=>b.onclick=()=>{sel=b.dataset.w;draw()});
+ const c=causes(s);
+ $("#causes").innerHTML=c.map(x=>`<div class="bar" style="grid-template-columns:130px 1fr 46px"><span>${x.n}</span><div class="track"><div class="fill" style="width:${x.v}%;background:${x.c}"></div></div><b>${f1(x.v)}%</b></div>`).join("");
+ const R={"Stock-outs & split shipments":"Safety-stock model per SKU×node; stop split-shipping low-margin orders","Pick-pack staffing gaps":"Flex-pool of trained staff + shift swaps; predictive roster for peak days","Route & last-mile overrun":"Dynamic route re-optimisation; cluster drops; add 2nd carrier on weak lanes","Inventory in wrong warehouse":"Demand-forecast-driven inter-warehouse transfers every 48h","Batching / dispatch cut-off":"Move to rolling waves; add 16:00 and 20:00 dispatch cut-offs"};
+ const gc=["var(--a3)","var(--a1)","var(--a2)","var(--a4)","var(--a5)"];
+ $("#recs").innerHTML=c.slice(0,4).map((x,i)=>`<div class="rec"><span class="n" style="background:${gc[i]}">${i+1}</span><div><b>${x.n} · ~${f1(x.v*.35)} pts recoverable</b>${R[x.n]}</div></div>`).join("");
+ const D=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"],P=[-6,-1,1,2,-3,-5,-9];
+ $("#heat").innerHTML="<tr><th></th>"+D.map(d=>`<th>${d}</th>`).join("")+"</tr>"+W.map((w,i)=>`<tr><td style="color:var(--tx)">${w.n}</td>`+D.map((d,j)=>{const v=Math.round(Math.max(52,Math.min(98,w.otd+P[j]+Math.sin(i*3+j*2)*2.5)));return`<td style="background:${col(v)}">${v}</td>`}).join("")+"</tr>").join("");
+ $("#score").innerHTML="<tr><th>Warehouse</th><th>Orders/day</th><th>OTD %</th><th>Pick-pack h</th><th>Stock-out %</th><th>Absent %</th><th>Route overrun %</th><th>Status</th></tr>"+W.map(w=>{const r=w.otd<75?["CRITICAL","var(--a3)"]:w.otd<85?["AT RISK","var(--a4)"]:["HEALTHY","var(--a5)"];return`<tr><td style="color:var(--tx)">${w.n}</td><td>${w.o.toLocaleString()}</td><td>${w.otd}</td><td>${w.pp}</td><td>${w.so}</td><td>${w.ab}</td><td>${w.ro}</td><td><span class="tag" style="background:${r[1]};color:#0b1020">${r[0]}</span></td></tr>`}).join("");
+ sim();
+}
+function trend(){
+ const w=600,h=220,p=30,X=i=>p+i*(w-2*p)/7,Y=v=>h-p-(v-55)*(h-2*p)/45;
+ const path=a=>a.map((v,i)=>(i?"L":"M")+X(i)+" "+Y(v)).join(" ");
+ let g=[60,70,80,90].map(v=>`<line x1="${p}" x2="${w-p}" y1="${Y(v)}" y2="${Y(v)}" stroke="var(--bd)"/><text x="4" y="${Y(v)+4}" fill="var(--mut)" font-size="11">${v}</text>`).join("");
+ g+=wk.map((t,i)=>`<text x="${X(i)}" y="${h-8}" fill="var(--mut)" font-size="11" text-anchor="middle">${t}</text>`).join("");
+ $("#trend").innerHTML=`<svg viewBox="0 0 ${w} ${h}"><defs><linearGradient id="gr" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#ff5c8a" stop-opacity=".4"/><stop offset="1" stop-color="#ff5c8a" stop-opacity="0"/></linearGradient></defs>${g}<path d="${path(TOT)} L${X(7)} ${h-p} L${X(0)} ${h-p}Z" fill="url(#gr)"/><path d="${path(TOT)}" fill="none" stroke="#ff5c8a" stroke-width="3"/><path d="${path(UT)}" fill="none" stroke="#00d4ff" stroke-width="3" stroke-dasharray="6 5"/>${TOT.map((v,i)=>`<circle cx="${X(i)}" cy="${Y(v)}" r="4" fill="#ff5c8a"/>`).join("")}<text x="${w-p-4}" y="${Y(TOT[7])-10}" fill="#ff5c8a" font-size="12" text-anchor="end">On-time ${TOT[7]}%</text><text x="${w-p-4}" y="${Y(UT[7])-8}" fill="#00d4ff" font-size="12" text-anchor="end">Capacity used ${UT[7]}%</text></svg>`;
+}
+function sim(){
+ const a=$("#s1").value/100,b=$("#s2").value/100,c=$("#s3").value/100,s=scope(),g=gains(s,a,b,c),tot=g.st+g.iv+g.rt,np=Math.min(97,s.otd+tot);
+ $("#s1v").textContent=Math.round(a*100)+"%";$("#s2v").textContent=Math.round(b*100)+"%";$("#s3v").textContent=Math.round(c*100)+"%";
+ $("#simscope").textContent="· "+(sel==="All"?"Network":sel);
+ const C=2*Math.PI*52,cmp=Math.round(s.cp*(1-(np-s.otd)/55));
+ $("#sim").innerHTML=`<svg viewBox="0 0 200 140" style="max-width:260px;margin:auto"><circle cx="100" cy="72" r="52" fill="none" stroke="var(--bd)" stroke-width="14"/><circle cx="100" cy="72" r="52" fill="none" stroke="${col(np)}" stroke-width="14" stroke-linecap="round" stroke-dasharray="${C*np/100} ${C}" transform="rotate(-90 100 72)"/><text x="100" y="72" text-anchor="middle" font-size="28" font-weight="800" fill="var(--tx)">${f1(np)}%</text><text x="100" y="92" text-anchor="middle" font-size="11" fill="var(--mut)">projected on-time</text></svg>
+ <div style="text-align:center;font-size:.85rem;margin:6px 0">from ${f1(s.otd)}% → <b style="color:var(--a5)">+${f1(np-s.otd)} pts</b></div>
+ <div class="grid" style="grid-template-columns:1fr 1fr 1fr;font-size:.75rem;text-align:center"><div class="rec" style="display:block"><b style="color:var(--a4)">+${f1(g.st)}</b>staffing</div><div class="rec" style="display:block"><b style="color:var(--a1)">+${f1(g.iv)}</b>inventory</div><div class="rec" style="display:block"><b style="color:var(--a2)">+${f1(g.rt)}</b>routing</div></div>
+ <div style="font-size:.82rem;line-height:1.6">📞 Complaints: <b>${f1(s.cp)}</b> → <b style="color:var(--a5)">${cmp}</b> per 1,000<br>📦 Late orders avoided: <b>${Math.round(s.o*(np-s.otd)/100).toLocaleString()}</b> per day</div>`;
+}
+["s1","s2","s3"].forEach(i=>$("#"+i).oninput=sim);
+/* Agent */
+const chat=$("#chat");
+function say(h,u){const d=document.createElement("div");d.className="m "+(u?"u":"a");d.innerHTML=h;chat.appendChild(d);chat.scrollTop=chat.scrollHeight}
+function answer(q){
+ const l=q.toLowerCase(),hit=W.find(w=>l.includes(w.n.toLowerCase()));
+ if(hit){sel=hit.n}else if(/network|all|overall/.test(l))sel="All";
+ const s=scope(),c=causes(s),worst=W.slice().sort((a,b)=>a.otd-b.otd)[0],best=W.slice().sort((a,b)=>b.otd-a.otd)[0];
+ let r;
+ if(/capacity|enough|paradox/.test(l))r=`Capacity is <b>not</b> the issue: utilisation is ${f1(s.ut)}% with spare headroom, yet on-time is ${f1(s.otd)}%. Delays come from <b>where stock sits</b>, <b>who is present to pick it</b> and <b>how it is dispatched</b>.`;
+ else if(/best|top|healthy/.test(l))r=`<b>${best.n}</b> is the benchmark: ${best.otd}% on-time, ${best.pp} h pick-pack, ${best.ab}% absenteeism. Replicate its rostering and replenishment rules network-wide.`;
+ else if(/worst|critical|bad/.test(l))r=`<b>${worst.n}</b> is the most critical node: ${worst.otd}% on-time, backlog ${worst.bl.toLocaleString()}, absenteeism ${worst.ab}%, stock-outs ${worst.so}%. Fixing Delhi and Kolkata alone would recover ~${f1((92-71)*.38+(92-69)*.2)} network points.`;
+ else if(/recommend|fix|improve|action|solution/.test(l))r=`Top actions for <b>${sel==="All"?"the network":sel}</b>:<br>1️⃣ ${c[0].n} (~${f1(c[0].v*.35)} pts)<br>2️⃣ ${c[1].n} (~${f1(c[1].v*.35)} pts)<br>3️⃣ ${c[2].n} (~${f1(c[2].v*.35)} pts)<br>Test the combo in the Simulator tab.`;
+ else if(/complain|customer|nps/.test(l))r=`Complaints are ${f1(s.cp)} per 1,000 orders in ${sel==="All"?"the network":sel}. They track stock-outs (split shipments) and delay days almost one-to-one (r≈0.93 in this data). Cutting split shipments is the fastest complaint reducer.`;
+ else if(/forecast|predict|next|trend/.test(l))r=`At the current slide of ~1.9 pts/week, network on-time hits <b>~72% by W12</b> and peak season would push Delhi and Kolkata below 65%. Intervene within 2 weeks.`;
+ else if(/staff|absent|labou?r|roster/.test(l))r=`Absenteeism is ${f1(s.ab)}% (target &lt;8%), driving pick-pack to ${f1(s.pp)} h vs 5 h benchmark. Staffing explains ~${f1(c.find(x=>/staff/.test(x.n)).v)}% of delay here.`;
+ else if(/stock|inventor/.test(l))r=`Stock-outs run ${f1(s.so)}%. Inventory is positioned against last quarter’s demand, so orders split across nodes or wait for transfers. A 48-hour forecast-based rebalancing loop is the fix.`;
+ else if(/route|last|carrier|transit/.test(l))r=`Route overrun is ${f1(s.ro)}% — fixed routes ignore live traffic and drop clustering. Dynamic re-optimisation plus a backup carrier on weak lanes is advised.`;
+ else r=`<b>Diagnosis for ${sel==="All"?"the network":sel}:</b> on-time is ${f1(s.otd)}% against a 92% target. Root causes: <b>${c[0].n}</b> (${f1(c[0].v)}%), <b>${c[1].n}</b> (${f1(c[1].v)}%) and <b>${c[2].n}</b> (${f1(c[2].v)}%). Utilisation is only ${f1(s.ut)}%, so this is an execution and allocation problem, not a capacity one.`;
+ if(hit)r=`🔎 Focused on <b>${hit.n}</b>.<br>`+r;
+ draw();return r}
+function ask(t){if(!t.trim())return;say(t.replace(/</g,"&lt;"),1);const d=document.createElement("div");d.className="m a";d.textContent="Analysing data…";chat.appendChild(d);chat.scrollTop=1e5;setTimeout(()=>{d.remove();say(answer(t))},550)}
+$("#go").onclick=()=>{ask($("#q").value);$("#q").value=""};$("#q").onkeydown=e=>{if(e.key==="Enter")$("#go").click()};
+$("#qchips").innerHTML=["Why are deliveries late?","Which warehouse is worst?","Is capacity the problem?","Recommend fixes","Forecast next 4 weeks","Why Kolkata complaints?"].map(t=>`<button class="chip">${t}</button>`).join("");
+$("#qchips").querySelectorAll("button").forEach(b=>b.onclick=()=>ask(b.textContent));
+say("👋 I’m <b>DeliverIQ</b>. I scan orders, warehouses, routes, staffing and inventory to find <b>why</b> deliveries slip and <b>what to fix first</b>. Pick a question below.");
+draw();
+</script></body></html>
